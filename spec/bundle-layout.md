@@ -41,6 +41,7 @@ Example:
 ## Rules
 
 - Create bundles only on failure (no noise on pass).
+- `manifest.json` `meta.status` must be "FAILED".
 - `manifest.json` must only use relative paths (no absolute paths).
 - `context.log` is a human-readable narrative of steps + key context values.
 - Adapters must never invent extra top-level files in the bundle root beyond the spec.

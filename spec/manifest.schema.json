@@ -45,10 +45,7 @@
         "status": {
           "type": "string",
           "enum": [
-            "FAILED",
-            "PASSED",
-            "SKIPPED",
-            "ABORTED"
+            "FAILED"
           ]
         },
         "timestamp": {

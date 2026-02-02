@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -44,7 +45,10 @@ def check_filesystem(path: Path, instance: dict) -> bool:
     # Check for path safety and collect expectations
     for key, val in artifacts.items():
         # Safety checks: Traversal, Absolute Linux, Absolute Windows (drive letter)
-        if ".." in val or val.startswith("/") or val.startswith("\\") or (len(val) > 1 and val[1] == ":"):
+        # Safety checks: Traversal, Absolute Linux, Absolute Windows (drive letter), UNC
+        # Drive letter regex: starts with char + colon + slash/backslash, OR starts with double backslash (UNC/Network)
+        # We also check for simple absolute path "/" and traversal ".."
+        if ".." in val or val.startswith("/") or re.match(r"(^[a-zA-Z]:[\\/])|^\\\\", val):
              print(f"INVALID: {path} (unsafe path in artifacts: {key}={val})", file=sys.stderr)
              return False
              
