@@ -55,7 +55,6 @@
   },
   "artifacts": {
     "bundleDir": "9f2a0c1b3d4e5a6b_20260202T143000Z",
-    "logs": "context.log",
-    "attachmentsDir": "attachments/"
+    "logs": "context.log"
   }
 }

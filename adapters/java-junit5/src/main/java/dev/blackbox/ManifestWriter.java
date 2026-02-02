@@ -95,7 +95,7 @@ final class ManifestWriter {
         ObjectNode artifacts = root.putObject("artifacts");
         artifacts.put("bundleDir", paths.bundleDirName);
         artifacts.put("logs", "context.log");
-        if (!state.attachments.isEmpty()) {
+        if (Files.exists(paths.attachmentsDir)) {
             artifacts.put("attachmentsDir", "attachments/");
         }
 

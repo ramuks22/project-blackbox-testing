@@ -99,7 +99,22 @@ export class BlackBoxRecorder {
   constructor(testInfo: TestInfo) {
     const filePath = testInfo.file ? path.relative(process.cwd(), testInfo.file) : "unknown";
     this.testClass = filePath.replace(/\\/g, "/");
-    this.testName = testInfo.titlePath().join("::");
+    let tp: string[] = [];
+    try {
+      if (typeof testInfo.titlePath === "function") {
+        tp = testInfo.titlePath();
+      } else if (Array.isArray(testInfo.titlePath)) {
+        tp = testInfo.titlePath;
+      }
+    } catch {
+      // ignore
+    }
+
+    if (!Array.isArray(tp) || tp.length === 0) {
+      tp = [testInfo.title || "unknown"];
+    }
+
+    this.testName = tp.join("::");
     const canonical = `${this.testClass}::${this.testName}`;
     this.testId = sha1_16(canonical);
   }
@@ -144,8 +159,9 @@ export class BlackBoxRecorder {
     await fs.mkdir(bundleDir, { recursive: true });
 
     let attachmentsCreated = false;
+    const attachmentsDir = path.join(bundleDir, "attachments");
+
     if (this.attachments.length > 0) {
-      const attachmentsDir = path.join(bundleDir, "attachments");
       await fs.mkdir(attachmentsDir, { recursive: true });
       attachmentsCreated = true;
       const nameCounts = new Map<string, number>();
@@ -200,8 +216,14 @@ export class BlackBoxRecorder {
       manifest.exception.stackTrace = exceptionStack;
     }
 
-    if (attachmentsCreated) {
-      manifest.artifacts.attachmentsDir = "attachments/";
+    // Harden: check existence and type
+    try {
+      const stats = await fs.stat(attachmentsDir);
+      if (stats.isDirectory()) {
+        manifest.artifacts.attachmentsDir = "attachments/";
+      }
+    } catch {
+      // ignore
     }
 
     const contextLog = this.buildContextLog(endTime, durationMs);
