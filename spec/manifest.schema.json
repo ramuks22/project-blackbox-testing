@@ -1,0 +1,264 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://blackbox.dev/schemas/manifest.schema.json",
+  "title": "BlackBox Crash Bundle Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "meta",
+    "context",
+    "steps",
+    "exception",
+    "artifacts"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "testId",
+        "testName",
+        "testClass",
+        "status",
+        "timestamp",
+        "durationMs",
+        "runId",
+        "framework",
+        "runtime"
+      ],
+      "properties": {
+        "testId": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8,32}$"
+        },
+        "testName": {
+          "type": "string"
+        },
+        "testClass": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "FAILED",
+            "PASSED",
+            "SKIPPED",
+            "ABORTED"
+          ]
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "durationMs": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "runId": {
+          "type": "string"
+        },
+        "framework": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "version"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "enum": [
+                "junit5",
+                "pytest",
+                "playwright-test"
+              ]
+            },
+            "version": {
+              "type": "string"
+            }
+          }
+        },
+        "runtime": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "language",
+            "version",
+            "os"
+          ],
+          "properties": {
+            "language": {
+              "type": "string",
+              "enum": [
+                "java",
+                "python",
+                "node"
+              ]
+            },
+            "version": {
+              "type": "string"
+            },
+            "os": {
+              "type": "string"
+            },
+            "arch": {
+              "type": "string"
+            }
+          }
+        },
+        "testMethod": {
+          "type": "string"
+        },
+        "gitSha": {
+          "type": "string"
+        },
+        "ci": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/jsonValue"
+      }
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ts",
+          "level",
+          "message"
+        ],
+        "properties": {
+          "ts": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "DEBUG",
+              "INFO",
+              "WARN",
+              "ERROR"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        }
+      }
+    },
+    "exception": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "message"
+      ],
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "stackTrace": {
+          "type": "string"
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bundleDir",
+        "logs"
+      ],
+      "properties": {
+        "bundleDir": {
+          "type": "string"
+        },
+        "logs": {
+          "type": "string",
+          "const": "context.log"
+        },
+        "trace": {
+          "type": "string",
+          "const": "artifacts/trace.zip"
+        },
+        "screenshot": {
+          "type": "string",
+          "const": "artifacts/screenshot.png"
+        },
+        "console": {
+          "type": "string",
+          "const": "artifacts/console.txt"
+        },
+        "networkHar": {
+          "type": "string",
+          "const": "artifacts/network.har"
+        },
+        "attachmentsDir": {
+          "type": "string",
+          "const": "attachments/"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "jsonValue": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/jsonValue"
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}

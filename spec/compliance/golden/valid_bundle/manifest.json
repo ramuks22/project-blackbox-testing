@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "meta": {
+    "testId": "9f2a0c1b3d4e5a6b",
+    "testName": "test_failure",
+    "testClass": "tests/test_failing.py",
+    "status": "FAILED",
+    "timestamp": "2026-02-02T14:30:00Z",
+    "durationMs": 123,
+    "runId": "11111111-2222-3333-4444-555555555555",
+    "framework": {
+      "name": "pytest",
+      "version": "8.1.0"
+    },
+    "runtime": {
+      "language": "python",
+      "version": "3.11.7",
+      "os": "Linux",
+      "arch": "x86_64"
+    },
+    "parameters": {
+      "browser": "none",
+      "retry": 0
+    },
+    "env": {
+      "CI": true
+    }
+  },
+  "context": {
+    "user": "alice",
+    "count": 3,
+    "nested": {
+      "a": 1
+    }
+  },
+  "steps": [
+    {
+      "ts": "2026-02-02T14:29:59Z",
+      "level": "INFO",
+      "message": "setup"
+    },
+    {
+      "ts": "2026-02-02T14:30:00Z",
+      "level": "ERROR",
+      "message": "boom",
+      "data": {
+        "code": "EFAIL"
+      }
+    }
+  ],
+  "exception": {
+    "type": "AssertionError",
+    "message": "expected true",
+    "stackTrace": "Traceback ..."
+  },
+  "artifacts": {
+    "bundleDir": "9f2a0c1b3d4e5a6b_20260202T143000Z",
+    "logs": "context.log",
+    "attachmentsDir": "attachments/"
+  }
+}

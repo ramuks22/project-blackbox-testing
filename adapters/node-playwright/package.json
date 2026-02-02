@@ -1,0 +1,12 @@
+{
+  "name": "blackbox-playwright",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.41.2",
+    "typescript": "^5.4.0"
+  }
+}
