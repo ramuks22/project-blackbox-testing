@@ -232,7 +232,7 @@ def write_bundle(state: State, excinfo, report) -> None:
     if state.parameters:
         manifest["meta"]["parameters"] = state.parameters
 
-    if (bundle_dir / "attachments").exists():
+    if (bundle_dir / "attachments").is_dir():
         manifest["artifacts"]["attachmentsDir"] = "attachments/"
 
     (bundle_dir / "manifest.json").write_text(

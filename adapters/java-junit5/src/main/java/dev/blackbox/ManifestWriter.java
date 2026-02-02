@@ -41,7 +41,8 @@ final class ManifestWriter {
         }
     }
 
-    private static void writeManifest(BundlePaths paths, BlackBoxExtension.State state, Instant endTime, Throwable cause) throws IOException {
+    private static void writeManifest(BundlePaths paths, BlackBoxExtension.State state, Instant endTime,
+            Throwable cause) throws IOException {
         ObjectNode root = MAPPER.createObjectNode();
         root.put("schemaVersion", 1);
 
@@ -95,7 +96,7 @@ final class ManifestWriter {
         ObjectNode artifacts = root.putObject("artifacts");
         artifacts.put("bundleDir", paths.bundleDirName);
         artifacts.put("logs", "context.log");
-        if (Files.exists(paths.attachmentsDir)) {
+        if (Files.isDirectory(paths.attachmentsDir)) {
             artifacts.put("attachmentsDir", "attachments/");
         }
 
@@ -103,7 +104,8 @@ final class ManifestWriter {
         Files.writeString(paths.manifestPath, json, StandardCharsets.UTF_8);
     }
 
-    private static void writeContextLog(BundlePaths paths, BlackBoxExtension.State state, Instant endTime) throws IOException {
+    private static void writeContextLog(BundlePaths paths, BlackBoxExtension.State state, Instant endTime)
+            throws IOException {
         StringBuilder sb = new StringBuilder();
         sb.append("BlackBox context log\n");
         sb.append("testClass=").append(state.testClass).append("\n");
