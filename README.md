@@ -44,7 +44,15 @@ Each failing demo writes a bundle under `blackbox-reports/` in the adapter direc
 Make sure you have `mvn`, `python3`, and `npm` installed.
 
 make install
+
 make compliance
+
+## Dependency management policy
+
+- **Compliance tooling**: Pinned via `tools/requirements.txt` for consistency.
+- **Adapters**: Use compatible semver ranges to ensure portability across versions.
+- **Reproducibility**: Achieved via lockfiles (e.g., `package-lock.json`) and CI pipelines.
+
 
 
 ## Non-goals
