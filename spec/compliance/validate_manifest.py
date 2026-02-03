@@ -48,7 +48,7 @@ def check_filesystem(path: Path, instance: dict) -> bool:
         # Safety checks: Traversal, Absolute Linux, Absolute Windows (drive letter), UNC
         # Drive letter regex: starts with char + colon + slash/backslash, OR starts with double backslash (UNC/Network)
         # We also check for simple absolute path "/" and traversal ".."
-        if ".." in val or val.startswith("/") or re.match(r"(^[a-zA-Z]:[\\/])|^\\\\", val):
+        if ".." in val or val.startswith("/") or re.match(r"^[a-zA-Z]:|^\\\\", val):
              print(f"INVALID: {path} (unsafe path in artifacts: {key}={val})", file=sys.stderr)
              return False
              
