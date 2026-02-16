@@ -177,11 +177,9 @@ def write_bundle(state: State, excinfo, report) -> None:
     bundle_dir = out_path / bundle_name
     bundle_dir.mkdir(parents=True, exist_ok=True)
 
-    attachments_created = False
     if state.attachments:
         attachments_dir = bundle_dir / "attachments"
         attachments_dir.mkdir(parents=True, exist_ok=True)
-        attachments_created = True
         name_counts: Dict[str, int] = {}
         for name, content in state.attachments:
             count = name_counts.get(name, 0)
@@ -235,9 +233,7 @@ def write_bundle(state: State, excinfo, report) -> None:
     if (bundle_dir / "attachments").is_dir():
         manifest["artifacts"]["attachmentsDir"] = "attachments/"
 
-    (bundle_dir / "manifest.json").write_text(
-        json.dumps(manifest, indent=2), encoding="utf-8"
-    )
+    (bundle_dir / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
 
 def pytest_addoption(parser) -> None:

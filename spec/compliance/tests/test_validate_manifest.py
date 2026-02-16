@@ -1,15 +1,12 @@
 """Tests for validate_manifest.py — the compliance gatekeeper."""
+
 import json
-import shutil
 import sys
 from pathlib import Path
-
-import pytest
 
 # Add parent directory to sys.path so we can import validate_manifest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from validate_manifest import check_filesystem, load_schema, validate_file  # noqa: E402
-
 
 GOLDEN_DIR = Path(__file__).resolve().parent.parent / "golden"
 
@@ -159,7 +156,9 @@ class TestCheckFilesystemUnit:
         assert check_filesystem(path, manifest) is False
 
     def test_declared_attachments_dir_exists_passes(self, tmp_path):
-        manifest = self._minimal_manifest(bundle_dir_name=tmp_path.name, attachmentsDir="attachments/")
+        manifest = self._minimal_manifest(
+            bundle_dir_name=tmp_path.name, attachmentsDir="attachments/"
+        )
         path = self._make_bundle(tmp_path, manifest, extra_dirs=["attachments"])
         # Put a file inside so it's not empty but still acceptable
         (tmp_path / "attachments" / "file.txt").write_text("data", encoding="utf-8")

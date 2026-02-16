@@ -1,9 +1,8 @@
 import json
+from pathlib import Path
 
 import jsonschema
 import pytest
-from pathlib import Path
-
 
 SCHEMA_PATH = Path(__file__).resolve().parents[1] / ".." / "manifest.schema.json"
 
@@ -15,6 +14,4 @@ def schema():
 
 @pytest.fixture(scope="session")
 def validator(schema):
-    return jsonschema.Draft202012Validator(
-        schema, format_checker=jsonschema.FormatChecker()
-    )
+    return jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker())

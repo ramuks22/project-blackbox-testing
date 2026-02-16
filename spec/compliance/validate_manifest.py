@@ -7,7 +7,10 @@ from pathlib import Path
 try:
     import jsonschema
 except Exception:
-    print("ERROR: jsonschema is required. Install with: python -m pip install jsonschema", file=sys.stderr)
+    print(
+        "ERROR: jsonschema is required. Install with: python -m pip install jsonschema",
+        file=sys.stderr,
+    )
     sys.exit(2)
 
 
@@ -41,7 +44,7 @@ def check_filesystem(path: Path, instance: dict) -> bool:
     expected_dirs = set()
 
     artifacts = instance.get("artifacts", {})
-    
+
     # Check for path safety and collect expectations
     for key, val in artifacts.items():
         # Safety checks: Traversal, Absolute Linux, Absolute Windows (drive letter)
@@ -49,16 +52,19 @@ def check_filesystem(path: Path, instance: dict) -> bool:
         # Drive letter regex: starts with char + colon + slash/backslash, OR starts with double backslash (UNC/Network)
         # We also check for simple absolute path "/" and traversal ".."
         if ".." in val or val.startswith("/") or re.match(r"^[a-zA-Z]:|^\\\\", val):
-             print(f"INVALID: {path} (unsafe path in artifacts: {key}={val})", file=sys.stderr)
-             return False
-             
+            print(f"INVALID: {path} (unsafe path in artifacts: {key}={val})", file=sys.stderr)
+            return False
+
         if key == "bundleDir":
             # Semantic check: bundleDir must match actual directory name
             if val and val != bundle_root.name:
-                print(f"INVALID: {path} (artifacts.bundleDir '{val}' != actual directory '{bundle_root.name}')", file=sys.stderr)
+                print(
+                    f"INVALID: {path} (artifacts.bundleDir '{val}' != actual directory '{bundle_root.name}')",
+                    file=sys.stderr,
+                )
                 return False
             continue
-            
+
         if val.endswith("/"):
             expected_dirs.add(val)
         else:
@@ -69,38 +75,44 @@ def check_filesystem(path: Path, instance: dict) -> bool:
     for f in expected_files:
         if not (bundle_root / f).exists():
             missing.append(f)
-    
+
     if missing:
         print(f"INVALID: {path} (missing files declared in manifest: {missing})", file=sys.stderr)
         return False
-        
+
     # 2. Verify no extras (Strict Mode) + Attachments Logic
     extras = []
-    
+
     # Check specifically for undeclared 'attachments' directory existence (even if empty)
     # The 'attachmentsDir' key usually has value "attachments/"
     attachments_declared = any(d == "attachments/" for d in expected_dirs)
-    
+
     # 1. If declared, it MUST exist (Strict Spec consistency)
     if attachments_declared and not (bundle_root / "attachments").exists():
-         print(f"INVALID: {path} ('attachmentsDir' declared but 'attachments/' directory missing)", file=sys.stderr)
-         return False
+        print(
+            f"INVALID: {path} ('attachmentsDir' declared but 'attachments/' directory missing)",
+            file=sys.stderr,
+        )
+        return False
 
     # 2. If present on disk, it MUST be declared
     if (bundle_root / "attachments").exists() and not attachments_declared:
-         print(f"INVALID: {path} (found 'attachments/' directory but 'attachmentsDir' not in manifest)", file=sys.stderr)
-         return False
+        print(
+            f"INVALID: {path} (found 'attachments/' directory but 'attachmentsDir' not in manifest)",
+            file=sys.stderr,
+        )
+        return False
 
     # rglob/walk the bundle_root for FILES
     for p in bundle_root.rglob("*"):
         if not p.is_file():
             continue
         rel = p.relative_to(bundle_root).as_posix()
-        
+
         # Check if explicitly expected
         if rel in expected_files:
             continue
-            
+
         # Check if inside an expected directory
         # e.g. rel="attachments/foo.png", expected_dirs={"attachments/"}
         is_covered = False
@@ -110,14 +122,15 @@ def check_filesystem(path: Path, instance: dict) -> bool:
                 break
         if is_covered:
             continue
-            
+
         extras.append(rel)
-        
+
     if extras:
         print(f"INVALID: {path} (contain extra files not in manifest: {extras})", file=sys.stderr)
         return False
-        
+
     return True
+
 
 def validate_file(path: Path, validator) -> bool:
     if not path.exists():
@@ -135,7 +148,7 @@ def validate_file(path: Path, validator) -> bool:
             loc = "/".join(str(p) for p in err.path) or "<root>"
             print(f"  - {loc}: {err.message}", file=sys.stderr)
         return False
-        
+
     # Schema checks passed, now check strict filesystem hygiene
     if not check_filesystem(path, instance):
         return False

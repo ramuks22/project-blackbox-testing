@@ -38,7 +38,7 @@ latest_bundle() {
     return 1
   fi
   local latest
-  latest=$(ls -1dt "$dir"/*/ 2>/dev/null | head -n 1 || true)
+  latest=$(find "$dir" -mindepth 1 -maxdepth 1 -type d -print | sort | tail -n 1 || true)
   if [ -z "$latest" ]; then
     return 1
   fi
@@ -171,6 +171,7 @@ run_unit_tests() {
   fi
 
   echo "[compliance] running Python adapter unit tests..."
+  (cd "$ROOT_DIR/adapters/python-pytest" && "$PYTHON_BIN" -m pip install -e . >/dev/null)
   if ! (cd "$ROOT_DIR/adapters/python-pytest" && "$PYTHON_BIN" -m pytest tests/test_plugin_units.py -v); then
     echo "ERROR: Python adapter unit tests failed!"
     fail=1
@@ -222,4 +223,3 @@ fi
 
 echo ""
 echo "✅ COMPLIANCE PASSED"
-
