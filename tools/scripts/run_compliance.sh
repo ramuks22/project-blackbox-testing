@@ -171,6 +171,7 @@ run_unit_tests() {
   fi
 
   echo "[compliance] running Python adapter unit tests..."
+  (cd "$ROOT_DIR/adapters/python-pytest" && "$PYTHON_BIN" -m pip install -e . >/dev/null)
   if ! (cd "$ROOT_DIR/adapters/python-pytest" && "$PYTHON_BIN" -m pytest tests/test_plugin_units.py -v); then
     echo "ERROR: Python adapter unit tests failed!"
     fail=1
