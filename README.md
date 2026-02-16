@@ -79,17 +79,17 @@ make compliance
 
 `make compliance` runs unit tests -> golden bundle validation -> adapter compliance checks.
 
-6. Run a failing demo per adapter (expected to fail and emit bundles):
+6. From the repository root, run a failing demo per adapter (expected to fail and emit bundles):
 
 ```bash
 # Java
-cd adapters/java-junit5 && mvn -q -Dtest=SampleFailingTest test
+(cd adapters/java-junit5 && mvn -q -Dtest=SampleFailingTest test)
 
 # Python
-cd adapters/python-pytest && python3 -m pytest -q tests/test_failing.py
+(cd adapters/python-pytest && python3 -m pytest -q tests/test_failing.py)
 
 # Node
-cd adapters/node-playwright && npm test
+(cd adapters/node-playwright && npm test)
 ```
 
 ## Make targets
