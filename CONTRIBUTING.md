@@ -25,6 +25,7 @@ Git has a `-s` flag to `git commit` that automates this:
 Use the provided Makefile to orchestrate the repo:
 
 -   `make install`: Install dependencies
+-   `make lint`: Run lint gates (ruff/black, eslint, shellcheck)
 -   `make compliance`: Run the compliance suite against all adapters
 
 ## Code Style

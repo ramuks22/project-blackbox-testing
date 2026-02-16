@@ -1,14 +1,15 @@
 """Unit tests for pytest_blackbox.plugin deterministic primitives."""
+
 from datetime import datetime, timezone
 from unittest.mock import MagicMock
 
 from pytest_blackbox.plugin import (
+    autouse_enabled,
     bundle_ts,
     iso_ts,
     sanitize_filename,
     sha1_16,
     to_json_value,
-    autouse_enabled,
 )
 
 

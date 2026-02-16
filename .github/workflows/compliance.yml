@@ -31,6 +31,15 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r tools/requirements.txt
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+          cd adapters/node-playwright
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 npm install
+
+      - name: Run lint gates
+        run: make lint
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
 
       - name: Run compliance suite
         run: ./tools/scripts/run_compliance.sh

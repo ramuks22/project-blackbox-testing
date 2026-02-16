@@ -45,6 +45,8 @@ Make sure you have `mvn`, `python3`, and `npm` installed.
 
 make install
 
+make lint
+
 make compliance
 
 ## Dependency management policy

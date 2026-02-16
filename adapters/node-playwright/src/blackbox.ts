@@ -79,7 +79,6 @@ export function sha1_16(input: string): string {
 
 function getPlaywrightVersion(): string {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     return require("@playwright/test/package.json").version || "unknown";
   } catch {
     return "unknown";
@@ -160,12 +159,10 @@ export class BlackBoxRecorder {
 
     await fs.mkdir(bundleDir, { recursive: true });
 
-    let attachmentsCreated = false;
     const attachmentsDir = path.join(bundleDir, "attachments");
 
     if (this.attachments.length > 0) {
       await fs.mkdir(attachmentsDir, { recursive: true });
-      attachmentsCreated = true;
       const nameCounts = new Map<string, number>();
       for (const att of this.attachments) {
         const count = nameCounts.get(att.name) || 0;

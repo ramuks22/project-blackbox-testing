@@ -38,7 +38,7 @@ latest_bundle() {
     return 1
   fi
   local latest
-  latest=$(ls -1dt "$dir"/*/ 2>/dev/null | head -n 1 || true)
+  latest=$(find "$dir" -mindepth 1 -maxdepth 1 -type d -print | sort | tail -n 1 || true)
   if [ -z "$latest" ]; then
     return 1
   fi
@@ -222,4 +222,3 @@ fi
 
 echo ""
 echo "✅ COMPLIANCE PASSED"
-

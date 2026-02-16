@@ -1,4 +1,4 @@
-.PHONY: test test-units compliance clean install help
+.PHONY: test test-units lint compliance clean install help
 
 # Default to help
 help:
@@ -8,6 +8,7 @@ help:
 	@echo "  make install      - Install dependencies for all adapters"
 	@echo "  make test         - Run demo tests for all adapters (expecting failures)"
 	@echo "  make test-units   - Run unit tests for all adapters (must pass)"
+	@echo "  make lint         - Run lint gates (ruff/black, eslint, shellcheck)"
 	@echo "  make compliance   - Run the full compliance suite (includes unit tests)"
 	@echo "  make clean        - Remove build artifacts and bundles"
 
@@ -38,6 +39,10 @@ test-units:
 	cd adapters/java-junit5 && mvn test
 	@echo "Running Node Adapter Unit Tests..."
 	cd adapters/node-playwright && npm run test:unit
+
+lint:
+	@echo "Running Lint Gates..."
+	./tools/scripts/run_lint.sh
 
 compliance:
 	@echo "Running Compliance Suite..."
