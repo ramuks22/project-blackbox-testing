@@ -15,4 +15,5 @@ exclude = ["node_modules", "target", "blackbox-reports"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I"]
+# E501 (line too long) is ignored because black handles Python line length
 ignore = ["E501"]
