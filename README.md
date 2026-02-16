@@ -42,7 +42,7 @@ project-blackbox-testing/
 - Python 3.8+
 - Node.js 18+
 - npm 9+
-- shellcheck 0.8+ (required for `make lint`)
+- shellcheck 0.8+ (required for `make lint`; install separately, e.g. `brew install shellcheck` or `apt-get install shellcheck`)
 
 ## Quickstart
 
@@ -121,7 +121,8 @@ Adapter details:
 
 - Compliance tooling is pinned in `tools/requirements.txt`.
 - Adapters use compatible semver ranges.
-- Reproducibility is enforced with lockfiles where available (currently `package-lock.json` for Node) plus CI validation.
+- Only Node currently commits a lockfile (`package-lock.json`).
+- Python and Java do not currently commit lockfiles; reproducibility there is CI-validated rather than lockfile-enforced.
 
 ## Non-goals
 
