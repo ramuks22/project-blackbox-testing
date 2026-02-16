@@ -1,18 +1,25 @@
 # BlackBox JUnit 5 Adapter
 
+## Prerequisites
+
+- Java (JDK) 11+
+- Maven 3.8+
+
 ## Install
 
-Maven dependency (placeholder):
+This adapter is developed in-repo. It is not published as a Maven artifact yet.
+Use it directly from this monorepo.
 
-<dependency>
-  <groupId>dev.blackbox</groupId>
-  <artifactId>blackbox-junit5</artifactId>
-  <version>0.1.0</version>
-  <scope>test</scope>
-</dependency>
+From the repo root:
+
+```bash
+cd adapters/java-junit5
+mvn -v
+```
 
 ## Usage
 
+```java
 @ExtendWith(BlackBoxExtension.class)
 class MyTest {
   @Test
@@ -23,18 +30,36 @@ class MyTest {
     Assertions.fail("boom");
   }
 }
+```
 
-Note: the static API relies on the test thread (MVP constraint).
+Note: the static API relies on the current test thread (MVP constraint).
+
+## Running tests
+
+Run unit tests (must pass):
+
+```bash
+cd adapters/java-junit5
+mvn test
+```
+
+Run the demo failing test (expected failure, emits bundle):
+
+```bash
+cd adapters/java-junit5
+mvn -q -Dtest=SampleFailingTest test
+```
 
 ## TestId derivation
 
-canonical = "{testClass}::{testName}"
+`canonical = "{testClass}::{testName}"`
 
-- testClass: fully-qualified class name
-- testName: method name if available, else display name
-- testId: sha1(canonical).hexdigest().slice(0, 16)
+- `testClass`: fully-qualified class name
+- `testName`: method name if available, else display name
+- `testId`: `sha1(canonical).hexdigest().slice(0, 16)`
 
 ## Output directory
 
 Default: `blackbox-reports/`
+
 Override: `-Dblackbox.outputDir=/path/to/output`

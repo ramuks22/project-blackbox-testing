@@ -102,10 +102,12 @@ export class BlackBoxRecorder {
     this.testClass = filePath.replace(/\\/g, "/");
     let tp: string[] = [];
     try {
-      if (typeof testInfo.titlePath === "function") {
-        tp = testInfo.titlePath();
-      } else if (Array.isArray(testInfo.titlePath)) {
-        tp = testInfo.titlePath;
+      // Cast to any to avoid TS error: Type 'never' has no call signatures
+      const ti = testInfo as any;
+      if (typeof ti.titlePath === "function") {
+        tp = ti.titlePath();
+      } else if (Array.isArray(ti.titlePath)) {
+        tp = ti.titlePath;
       }
     } catch {
       // ignore
@@ -176,7 +178,7 @@ export class BlackBoxRecorder {
     }
 
     const durationMs = testInfo.duration ?? endTime.getTime() - this.startTime.getTime();
-    const error = (testInfo.errors && testInfo.errors[0]) || (testInfo as any).error;
+    const error = ((testInfo.errors && testInfo.errors[0]) || (testInfo as any).error) as any;
     const exceptionType = error && error.name ? error.name : "Error";
     const exceptionMessage = error && error.message ? error.message : "Test failed";
     const exceptionStack = error && error.stack ? error.stack : undefined;
