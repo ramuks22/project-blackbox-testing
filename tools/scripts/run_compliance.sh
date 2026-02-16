@@ -158,6 +158,48 @@ run_golden() {
   fi
 }
 
+run_unit_tests() {
+  echo ""
+  echo "[compliance] ========================================"
+  echo "[compliance]  UNIT TESTS — must all pass"
+  echo "[compliance] ========================================"
+
+  echo "[compliance] running validator unit tests..."
+  if ! (cd "$ROOT_DIR/spec/compliance" && "$PYTHON_BIN" -m pytest tests/ -v); then
+    echo "ERROR: Validator unit tests failed!"
+    fail=1
+  fi
+
+  echo "[compliance] running Python adapter unit tests..."
+  if ! (cd "$ROOT_DIR/adapters/python-pytest" && "$PYTHON_BIN" -m pytest tests/test_plugin_units.py -v); then
+    echo "ERROR: Python adapter unit tests failed!"
+    fail=1
+  fi
+
+  echo "[compliance] running Java adapter unit tests..."
+  if ! (cd "$ROOT_DIR/adapters/java-junit5" && mvn test -q); then
+    echo "ERROR: Java adapter unit tests failed!"
+    fail=1
+  fi
+
+  echo "[compliance] running Node adapter unit tests..."
+  if ! (cd "$ROOT_DIR/adapters/node-playwright" && npm run test:unit); then
+    echo "ERROR: Node adapter unit tests failed!"
+    fail=1
+  fi
+
+  if [ "$fail" -ne 0 ]; then
+    echo ""
+    echo "❌ UNIT TESTS FAILED — aborting compliance run"
+    exit 1
+  fi
+
+  echo ""
+  echo "[compliance] ✅ All unit tests passed"
+  echo ""
+}
+
+run_unit_tests
 run_golden
 run_java
 run_python

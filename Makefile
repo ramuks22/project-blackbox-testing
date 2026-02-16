@@ -1,4 +1,4 @@
-.PHONY: test compliance clean install help
+.PHONY: test test-units compliance clean install help
 
 # Default to help
 help:
@@ -6,8 +6,9 @@ help:
 	@echo ""
 	@echo "Targets:"
 	@echo "  make install      - Install dependencies for all adapters"
-	@echo "  make test         - Run tests for all adapters (expecting failures)"
-	@echo "  make compliance   - Run the compliance suite"
+	@echo "  make test         - Run demo tests for all adapters (expecting failures)"
+	@echo "  make test-units   - Run unit tests for all adapters (must pass)"
+	@echo "  make compliance   - Run the full compliance suite (includes unit tests)"
 	@echo "  make clean        - Remove build artifacts and bundles"
 
 install:
@@ -26,7 +27,17 @@ test:
 	@echo "Running Node Adapter Tests..."
 	cd adapters/node-playwright && npm test || true
 	@echo "Running Java Adapter Tests..."
-	cd adapters/java-junit5 && mvn test || true
+	cd adapters/java-junit5 && mvn test -Dtest=SampleFailingTest -DfailIfNoTests=false || true
+
+test-units:
+	@echo "Running Validator Unit Tests..."
+	cd spec/compliance && python3 -m pytest tests/ -v
+	@echo "Running Python Adapter Unit Tests..."
+	cd adapters/python-pytest && python3 -m pytest tests/test_plugin_units.py -v
+	@echo "Running Java Adapter Unit Tests..."
+	cd adapters/java-junit5 && mvn test
+	@echo "Running Node Adapter Unit Tests..."
+	cd adapters/node-playwright && npm run test:unit
 
 compliance:
 	@echo "Running Compliance Suite..."
