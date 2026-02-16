@@ -17,8 +17,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class BlackBoxExtension implements BeforeEachCallback, AfterEachCallback, TestWatcher {
-    private static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(BlackBoxExtension.class);
+    private static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace
+            .create(BlackBoxExtension.class);
     private static final String STATE_KEY = "blackbox.state";
+    private static final String RUN_ID = UUID.randomUUID().toString();
     private static final ThreadLocal<ExtensionContext> CURRENT = new ThreadLocal<>();
 
     @Override
@@ -68,7 +70,7 @@ public class BlackBoxExtension implements BeforeEachCallback, AfterEachCallback,
         Instant startTime;
 
         State(ExtensionContext context) {
-            this.runId = UUID.randomUUID().toString();
+            this.runId = RUN_ID;
             this.testClass = context.getRequiredTestClass().getName();
             Optional<Method> method = context.getTestMethod();
             this.testMethod = method.map(Method::getName).orElse(null);

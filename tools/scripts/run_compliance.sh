@@ -151,7 +151,7 @@ run_node() {
 
 run_golden() {
   echo "[compliance] running golden reference check"
-  if ! validate_bundle "$ROOT_DIR/spec/compliance/golden/valid_bundle"; then
+  if ! validate_bundle "$ROOT_DIR/spec/compliance/golden/9f2a0c1b3d4e5a6b_20260202T143000Z"; then
     echo "ERROR: Golden bundle failed validation!"
     fail=1
     exit 1

@@ -22,7 +22,7 @@ interface Attachment {
 
 const LEVELS = new Set<StepLevel>(["DEBUG", "INFO", "WARN", "ERROR"]);
 
-function toJsonValue(value: unknown): JsonValue {
+export function toJsonValue(value: unknown): JsonValue {
   if (value === null || value === undefined) return null;
   if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
     return value;
@@ -53,13 +53,13 @@ function toJsonValue(value: unknown): JsonValue {
   return String(value);
 }
 
-function sanitizeFileName(name: string): string {
+export function sanitizeFileName(name: string): string {
   if (!name) return "attachment";
   const safe = name.replace(/[^A-Za-z0-9._-]/g, "_");
   return safe || "attachment";
 }
 
-function bundleTimestamp(date: Date): string {
+export function bundleTimestamp(date: Date): string {
   const pad = (n: number) => n.toString().padStart(2, "0");
   return (
     date.getUTCFullYear().toString() +
@@ -73,7 +73,7 @@ function bundleTimestamp(date: Date): string {
   );
 }
 
-function sha1_16(input: string): string {
+export function sha1_16(input: string): string {
   return crypto.createHash("sha1").update(input).digest("hex").slice(0, 16);
 }
 
@@ -86,12 +86,14 @@ function getPlaywrightVersion(): string {
   }
 }
 
+const PROCESS_RUN_ID = crypto.randomUUID();
+
 export class BlackBoxRecorder {
   private context: { [key: string]: JsonValue } = {};
   private steps: StepRecord[] = [];
   private attachments: Attachment[] = [];
   private startTime: Date = new Date();
-  private runId: string = crypto.randomUUID();
+  private runId: string = PROCESS_RUN_ID;
   private testClass: string;
   private testName: string;
   private testId: string;

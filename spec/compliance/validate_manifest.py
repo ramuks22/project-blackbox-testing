@@ -53,6 +53,10 @@ def check_filesystem(path: Path, instance: dict) -> bool:
              return False
              
         if key == "bundleDir":
+            # Semantic check: bundleDir must match actual directory name
+            if val and val != bundle_root.name:
+                print(f"INVALID: {path} (artifacts.bundleDir '{val}' != actual directory '{bundle_root.name}')", file=sys.stderr)
+                return False
             continue
             
         if val.endswith("/"):

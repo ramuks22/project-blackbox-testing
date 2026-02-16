@@ -43,5 +43,6 @@ Example:
 - Create bundles only on failure (no noise on pass).
 - `manifest.json` `meta.status` must be "FAILED".
 - `manifest.json` must only use relative paths (no absolute paths).
-- `context.log` is a human-readable narrative of steps + key context values.
+- `context.log` is a human-readable narrative of steps + key context values. Its format is intentionally unstructured and MUST NOT be relied upon for machine parsing. Cross-adapter variation in formatting is expected and acceptable.
+- `manifest.json` `meta.runId` must be identical across all bundles produced in a single test-runner invocation (process). This enables cross-failure correlation within a run.
 - Adapters must never invent extra top-level files in the bundle root beyond the spec.

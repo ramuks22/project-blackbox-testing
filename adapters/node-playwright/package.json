@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "test": "playwright test"
+    "test": "playwright test tests/failing.spec.ts",
+    "test:unit": "playwright test tests/blackbox.unit.test.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.41.2",
